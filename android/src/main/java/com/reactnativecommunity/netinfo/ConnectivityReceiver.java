@@ -113,9 +113,12 @@ abstract class ConnectivityReceiver {
         WritableMap event = Arguments.createMap();
 
         // Add if WiFi is ON or OFF
-        boolean isEnabled = mWifiManager.isWifiEnabled();
-        event.putBoolean("isWifiEnabled", isEnabled);
-
+        if (ContextCompat.checkSelfPermission(getReactContext(),
+            Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_GRANTED) {
+            boolean isEnabled = mWifiManager.isWifiEnabled();
+            event.putBoolean("isWifiEnabled", isEnabled);
+        }
+        
         // Add the connection type information
         event.putString("type", requestedInterface != null ? requestedInterface : mConnectionType.label);
 
